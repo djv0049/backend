@@ -1,0 +1,45 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon --watch src --ext ts --exec ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@mikro-orm/core": "^6.6.5",
+    "@mikro-orm/sqlite": "^6.6.5",
+    "@tsed/common": "^8.24.1",
+    "@tsed/core": "^8.24.1",
+    "@tsed/di": "^8.24.1",
+    "@tsed/mikro-orm": "^8.24.1",
+    "@tsed/platform-express": "^8.24.1",
+    "@tsed/schema": "^8.24.1",
+    "@types/express": "^5.0.6",
+    "better-sqlite3": "^12.6.2",
+    "body-parser": "^2.2.2",
+    "compression": "^1.8.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "method-override": "^3.0.0",
+    "reflect-metadata": "^0.2.2"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.6",
+    "@types/compression": "^1.8.1",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/method-override": "^3.0.0",
+    "@types/node": "^25.0.10",
+    "nodemon": "^3.1.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
