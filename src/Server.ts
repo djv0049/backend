@@ -8,15 +8,22 @@ import compress from "compression";
 import cookieParser from "cookie-parser";
 import methodOverride from "method-override";
 import cors from "cors";
+import * as controllers from "../src/controllers"
+import { readFileSync } from "fs";
+import { join } from "path";
 
 @Configuration({
   rootDir: __dirname,
   acceptMimes: ["application/json"],
-  httpPort: process.env.PORT || 3000,
-  httpsPort: false,
+  httpPort: 3002,
+  httpsPort: process.env.PORT || 443,
+  httpsOptions: {
+    key: readFileSync(join(__dirname, "../certs/key.pem")),
+    cert: readFileSync(join(__dirname, "../certs/cert.pem"))
+  },
   disableComponentsScan: false,
   mount: {
-    "/api": [`${__dirname}/controllers/**/*.ts`]
+    '/': [...Object.values(controllers)],
   },
   mikroOrm: [
     {

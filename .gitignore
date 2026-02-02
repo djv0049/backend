@@ -1,6 +1,7 @@
-node_modules/
-dist/
-*.sqlite
+node_modules
+dist
+db.sqlite
+certs/
 *.log
 .env
 .DS_Store

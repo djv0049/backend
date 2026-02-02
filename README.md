@@ -56,24 +56,28 @@ npm start
 
 ## API Endpoints
 
-The API is available at `http://localhost:3000/api`
+The API is available at `https://localhost:3443/api`
+
+**Note**: This server uses a self-signed SSL certificate for local development. You may need to:
+- Accept the security warning in your browser
+- Use `curl -k` or `--insecure` flag to bypass certificate validation
 
 ### Get All Users
 
 ```bash
-GET http://localhost:3000/api/users
+GET https://localhost:3443/api/users
 ```
 
 ### Get User by ID
 
 ```bash
-GET http://localhost:3000/api/users/:id
+GET https://localhost:3443/api/users/:id
 ```
 
 ### Create User
 
 ```bash
-POST http://localhost:3000/api/users
+POST https://localhost:3443/api/users
 Content-Type: application/json
 
 {
@@ -88,15 +92,15 @@ You can test the API using curl:
 
 ```bash
 # Create a user
-curl -X POST http://localhost:3000/api/users \
+curl -k -X POST https://localhost:3443/api/users \
   -H "Content-Type: application/json" \
   -d '{"name":"John Doe","email":"john@example.com"}'
 
 # Get all users
-curl http://localhost:3000/api/users
+curl -k https://localhost:3443/api/users
 
 # Get user by ID
-curl http://localhost:3000/api/users/1
+curl -k https://localhost:3443/api/users/1
 ```
 
 ## Database

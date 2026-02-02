@@ -1,13 +1,16 @@
-import { Controller, Get, Post, BodyParams, PathParams } from "@tsed/common";
+import { Controller, Get, Post, BodyParams, PathParams, Inject } from "@tsed/common";
 import { EntityManager } from "@mikro-orm/core";
 import { Task } from "../entities/Task";
 
 @Controller("/task")
 export class TaskController {
-  constructor(private em: EntityManager) {}
+  @Inject()
+  private em!: EntityManager;
+
   @Get('/test')
   async getTest(): Promise<any> {
-    return "This is a test"
+    console.log('hit test')
+    return {working: 'yes'}
   }
 
   @Get("/")

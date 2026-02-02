@@ -1,10 +1,11 @@
-import { Controller, Get, Post, BodyParams, PathParams } from "@tsed/common";
+import { Controller, Get, Post, BodyParams, PathParams, Inject } from "@tsed/common";
 import { EntityManager } from "@mikro-orm/core";
 import { User } from "../entities/User";
 
 @Controller("/users")
 export class UserController {
-  constructor(private em: EntityManager) {}
+  @Inject()
+  private em!: EntityManager;
 
   @Get("/")
   async getAll(): Promise<User[]> {
