@@ -2,6 +2,10 @@ import { Controller, Get, Post, BodyParams, PathParams, Inject } from "@tsed/com
 import { EntityManager } from "@mikro-orm/core";
 import { Task } from "../entities/Task";
 
+export type task = {
+  name: string; startTime?: Date, endTime?: Date, priority: number
+}
+
 @Controller("/task")
 export class TaskController {
   @Inject()
@@ -10,7 +14,7 @@ export class TaskController {
   @Get('/test')
   async getTest(): Promise<any> {
     console.log('hit test')
-    return {working: 'yes'}
+    return { working: 'yes' }
   }
 
   @Get("/")
@@ -24,13 +28,18 @@ export class TaskController {
   }
 
   @Post("/")
-  async create(@BodyParams() body: { name: string; startTime: Date, endTime: Date, priority: number }): Promise<Task> {
+  async create(@BodyParams() body:task): Promise<Task> {
+    console.log("hit create task")
+    console.log('em', this.em?? 'no em')
     const em = this.em.fork();
+    console.log('did fork')
     const task = em.create(Task, {
       ...body,
       createdAt: new Date()
     });
+    console.log('setup task')
     await em.persistAndFlush(task);
+    console.log(task)
     return task;
   }
 }

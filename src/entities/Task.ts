@@ -9,10 +9,10 @@ export class Task {
   name!: string;
 
   @Property()
-  startTime!: Date;
+  startTime?: Date;
 
   @Property()
-  endTime!: Date;
+  endTime?: Date;
 
   @Property()
   priority!: number;
