@@ -1,13 +1,12 @@
 import { Configuration, Inject } from "@tsed/di";
 import { PlatformApplication } from "@tsed/common";
 import "@tsed/platform-express";
-import "@tsed/mikro-orm";
-import { SqliteDriver } from "@mikro-orm/sqlite";
 import bodyParser from "body-parser";
 import compress from "compression";
 import cookieParser from "cookie-parser";
 import methodOverride from "method-override";
 import cors from "cors";
+import '@tsed/mongoose'
 import * as controllers from "../src/controllers"
 import { readFileSync } from "fs";
 import { join } from "path";
@@ -25,14 +24,12 @@ import { join } from "path";
   mount: {
     '/': [...Object.values(controllers)],
   },
-  mikroOrm: [
+  mongoose: [
     {
-      contextName: "default",
-      driver: SqliteDriver,
-      dbName: "./db.sqlite",
-      entities: ["./dist/entities/**/*.js"],
-      entitiesTs: ["./src/entities/**/*.ts"]
-    }
+      id: 'default',
+      url: process.env.MONGO_URL || '',
+      connectionOptions: {},
+    },
   ],
   middlewares: [
     cors(),

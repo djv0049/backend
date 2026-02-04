@@ -18,7 +18,6 @@
     "@tsed/common": "^8.24.1",
     "@tsed/core": "^8.24.1",
     "@tsed/di": "^8.24.1",
-    "@tsed/mikro-orm": "^8.24.1",
     "@tsed/platform-express": "^8.24.1",
     "@tsed/schema": "^8.24.1",
     "@types/express": "^5.0.6",

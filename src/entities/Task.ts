@@ -1,12 +1,16 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Model, ObjectID, Ref } from "@tsed/mongoose";
+import { Property, Required } from "@tsed/schema";
 
-@Entity()
+@Model()
 export class Task {
-  @PrimaryKey()
-  id!: number;
+  @ObjectID("id")
+  _id!: string;
 
-  @Property()
+  @Required()
   name!: string;
+
+  @Required()
+  priority!: number;
 
   @Property()
   startTime?: Date;
@@ -15,9 +19,5 @@ export class Task {
   endTime?: Date;
 
   @Property()
-  priority!: number;
-
-  @Property()
-  createdAt: Date = new Date()
-
+  createdAt!: Date;
 }
