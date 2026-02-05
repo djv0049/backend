@@ -1,4 +1,4 @@
-import { Inject, Controller, Post, BodyParams } from "@tsed/common";
+import { Inject, Controller, Post, BodyParams, Get } from "@tsed/common";
 import { MongooseModel } from "@tsed/mongoose";
 import { Task } from "../entities/Task";
 
@@ -20,5 +20,9 @@ export class TaskController {
       ...body,
       createdAt: new Date()
     });
+  }
+  @Get("/test")
+  async test() {
+    return {working:"yes"}
   }
 }
