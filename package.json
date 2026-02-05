@@ -18,6 +18,7 @@
     "@tsed/common": "^8.24.1",
     "@tsed/core": "^8.24.1",
     "@tsed/di": "^8.24.1",
+    "@tsed/mongoose": "^8.24.2",
     "@tsed/platform-express": "^8.24.1",
     "@tsed/schema": "^8.24.1",
     "@types/express": "^5.0.6",
@@ -26,8 +27,10 @@
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "method-override": "^3.0.0",
+    "mongoose": "^9.1.5",
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {

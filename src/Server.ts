@@ -10,7 +10,9 @@ import '@tsed/mongoose'
 import * as controllers from "../src/controllers"
 import { readFileSync } from "fs";
 import { join } from "path";
+import 'dotenv/config';
 
+console.log(process.env.MONGO_URL)
 @Configuration({
   rootDir: __dirname,
   acceptMimes: ["application/json"],
