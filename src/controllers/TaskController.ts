@@ -15,7 +15,7 @@ export class TaskController {
   private taskModel!: MongooseModel<Task>;
 
   @Post("/")
-  async create(@BodyParams() body: CreateTaskDto): Promise<Task> {
+  async create(@BodyParams() body:JSON): Promise<Task> {
     return await this.taskModel.create({
       ...body,
       createdAt: new Date()
