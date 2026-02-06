@@ -14,13 +14,21 @@ export class TaskController {
   @Inject(Task)
   private taskModel!: MongooseModel<Task>;
 
+  @Get("/")
+  async getAllTasks() {
+    const all = await this.taskModel.find()
+    console.log(all)
+    return all
+  }
   @Post("/")
   async create(@BodyParams() body:JSON): Promise<Task> {
+    console.log(body)
     return await this.taskModel.create({
       ...body,
       createdAt: new Date()
     });
   }
+
   @Get("/test")
   async test() {
     return {working:"yes"}
