@@ -20,4 +20,13 @@ export class Task {
 
   @Property()
   createdAt!: Date;
+
+  @Property()
+  lastCompleted?: Date;
+
+  @Required()
+  isStreak!: boolean;
+
+  @Property()
+  streakCount?: number;
 }
