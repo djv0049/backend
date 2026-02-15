@@ -1,4 +1,4 @@
-import { Inject, Controller, Post, BodyParams, Get } from "@tsed/common";
+import { Inject, Controller, Post, BodyParams, Get, Put } from "@tsed/common";
 import { MongooseModel } from "@tsed/mongoose";
 import { Task } from "../entities/Task";
 
@@ -27,6 +27,19 @@ export class TaskController {
       ...body,
       createdAt: new Date()
     });
+  }
+
+  @Put("/")
+  async updateTask(@BodyParams() body: Task): Promise<Task|null>{
+    const filter = {_id: body._id}
+    const updates = {$set:body}
+    console.log("UPDATE:",body)
+    const result =await this.taskModel.updateOne( filter, updates  )
+    if (result.acknowledged)
+      return body
+    else return null
+
+
   }
 
   @Get("/test")
