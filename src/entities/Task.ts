@@ -3,7 +3,7 @@ import { Property, Required } from "@tsed/schema";
 
 @Model()
 export class Task {
-  @ObjectID("id")
+  @ObjectID()
   _id!: string;
 
   @Required()
@@ -13,10 +13,10 @@ export class Task {
   priority!: number;
 
   @Property()
-  startTime?: Date;
+  startTime?: string;
 
   @Property()
-  endTime?: Date;
+  endTime?: string;
 
   @Property()
   createdAt!: Date;
@@ -24,7 +24,7 @@ export class Task {
   @Property()
   lastCompleted?: Date;
 
-  @Required()
+  @Property()
   isStreak!: boolean;
 
   @Property()
