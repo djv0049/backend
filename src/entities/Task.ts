@@ -29,4 +29,7 @@ export class Task {
 
   @Property()
   streakCount?: number;
+
+  @Property()
+  timeframes?: []
 }
