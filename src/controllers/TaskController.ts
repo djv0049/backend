@@ -17,13 +17,10 @@ export class TaskController {
 
   @Get("/")
   async getAllTasks() {
-    const all = await this.taskModel.find()
-    console.log(all)
-    return all
+    return await this.taskModel.find()
   }
   @Post("/")
   async create(@BodyParams() body:JSON): Promise<Task> {
-    console.log(body)
     return await this.taskModel.create({
       ...body,
       createdAt: new Date()
@@ -34,7 +31,6 @@ export class TaskController {
   async updateTask(@BodyParams() body: Task): Promise<Task|null>{
     const filter = {_id: body._id}
     const updates = {$set:body}
-    console.log("UPDATE:",body)
     const result =await this.taskModel.updateOne( filter, updates  )
     if (result.acknowledged)
       return body
