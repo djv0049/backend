@@ -1,4 +1,4 @@
-import { Model, ObjectID, Ref } from "@tsed/mongoose";
+import { Model, ObjectID } from "@tsed/mongoose";
 import { Property, Required } from "@tsed/schema";
 
 @Model()
@@ -8,9 +8,6 @@ export class Task {
 
   @Required()
   name!: string;
-
-  @Required()
-  priority!: number;
 
   @Property()
   startTime?: string;
