@@ -1,4 +1,4 @@
-import { Inject, Controller, Post, BodyParams, Get, Put } from "@tsed/common";
+import { Inject, Controller, Post, BodyParams, Get, Put, Delete } from "@tsed/common";
 import { MongooseModel } from "@tsed/mongoose";
 import { Task } from "../entities/Task";
 import { error } from "console";
@@ -37,7 +37,7 @@ export class TaskController {
     else return null
   }
 
-  @Put("/")
+  @Delete("/")
   async deleteTask(@BodyParams() body: Task): Promise<Task | null> {
     const filter = { _id: body._id }
     const updates = { $set: body }
