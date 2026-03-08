@@ -20,7 +20,7 @@ export class TaskController {
     return await this.taskModel.find()
   }
   @Post("/")
-  async create(@BodyParams() body:JSON): Promise<Task> {
+  async create(@BodyParams() body: JSON): Promise<Task> {
     return await this.taskModel.create({
       ...body,
       createdAt: new Date()
@@ -28,19 +28,27 @@ export class TaskController {
   }
 
   @Put("/")
-  async updateTask(@BodyParams() body: Task): Promise<Task|null>{
-    const filter = {_id: body._id}
-    const updates = {$set:body}
-    const result =await this.taskModel.updateOne( filter, updates  )
+  async updateTask(@BodyParams() body: Task): Promise<Task | null> {
+    const filter = { _id: body._id }
+    const updates = { $set: body }
+    const result = await this.taskModel.updateOne(filter, updates)
     if (result.acknowledged)
       return body
     else return null
+  }
 
-
+  @Put("/")
+  async deleteTask(@BodyParams() body: Task): Promise<Task | null> {
+    const filter = { _id: body._id }
+    const updates = { $set: body }
+    const result = await this.taskModel.deleteOne(filter, updates)
+    if (result.acknowledged)
+      return body
+    else return null
   }
 
   @Get("/test")
   async test() {
-    return {working:"yes"}
+    return { working: "yes" }
   }
 }
