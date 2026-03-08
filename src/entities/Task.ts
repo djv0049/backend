@@ -16,6 +16,9 @@ export class Task {
   endTime?: string;
 
   @Property()
+  date?: Date;
+
+  @Property()
   createdAt!: Date;
 
   @Property()
@@ -29,4 +32,10 @@ export class Task {
 
   @Property()
   timeframes?: []
+
+  @Property()
+  repeatingFrequency?: string;
+
+  @Property()
+  repeatingFrequencyCount?: number;
 }
