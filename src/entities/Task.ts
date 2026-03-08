@@ -19,7 +19,7 @@ export class Task {
   createdAt!: Date;
 
   @Property()
-  lastCompleted?: Date;
+  lastModified?: {date: Date, action: string};
 
   @Property()
   isStreak!: boolean;
