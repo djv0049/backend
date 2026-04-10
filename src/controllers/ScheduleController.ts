@@ -1,5 +1,6 @@
-import { BodyParams, Controller, Get, Patch, PathParams, QueryParams } from '@tsed/common';
+import { BodyParams, Controller, Get, Inject, Patch, PathParams, QueryParams } from '@tsed/common';
 import moment from 'moment';
+import { MongooseModel } from '@tsed/mongoose'
 import { DayTemplate } from '../models';
 import DailyTaskInstance from '../models/DailyTaskInstance';
 import TaskTemplate from '../models/TaskTemplate';
@@ -7,6 +8,9 @@ import { generateScheduleLogic } from '../utils/scheduler';
 
 @Controller('/schedule')
 export class ScheduleController {
+  @Inject(DayTemplate)
+  private dayTemplate!: MongooseModel<DayTemplate>
+
   @Get('/')
   async getSchedule(@QueryParams('date') date: string) {
     try {
@@ -15,15 +19,13 @@ export class ScheduleController {
       }
 
       const currentDate = moment(date, "YYYY-MM-DD");
-    console.log(currentDate)
+      console.log(currentDate)
       const dayOfWeek = currentDate.day();
 
-      const allDayTemplates = await DayTemplate.find({})
-      console.log(allDayTemplates)
-      console.log(dayOfWeek)
-      const dayTemplate = await DayTemplate.findOne({ activeDays: dayOfWeek });
-      console.log(dayTemplate)
-      if (!dayTemplate) {
+      console.log(process.env.MONGO_URL)
+      const dayTemplateFound = await this.dayTemplate.findOne({ activeDays: dayOfWeek });
+      console.log(dayTemplateFound)
+      if (!dayTemplateFound) {
         return { tasks: [], dayTemplate: null };
       }
 
@@ -38,14 +40,14 @@ export class ScheduleController {
       if (needsGeneration) {
         const templates = await TaskTemplate.find({ recurrence: { $in: ['daily', 'weekly'] } });
         finalPendingTasks = await generateScheduleLogic({
-          windows: dayTemplate.slots.map(s => ({ ...s, type: 'slot' })),
+          windows: dayTemplateFound.slots.map((s: DayTemplate) => ({ ...s, type: 'slot' } as DayTemplate)),
           templates,
           date: currentDate.toDate()
         });
         await DailyTaskInstance.insertMany(finalPendingTasks);
       } else {
         finalPendingTasks = await generateScheduleLogic({
-          windows: dayTemplate.slots.map(s => ({ ...s, type: 'slot' })),
+          windows: dayTemplateFound.slots.map((s: DayTemplate) => ({ ...s, type: 'slot' })),
           templates: pendingTasks,
           date: currentDate.toDate()
         });
@@ -66,8 +68,8 @@ export class ScheduleController {
     try {
       const task = await DailyTaskInstance.findByIdAndUpdate(
         id,
-        { 
-          status: body.status, 
+        {
+          status: body.status,
           remainingTime: body.remainingTime,
           startedAt: body.status === 'in-progress' ? new Date() : undefined,
           completedAt: body.status === 'completed' ? new Date() : undefined

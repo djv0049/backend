@@ -1,34 +1,33 @@
-import mongoose, { Schema, Document, Types } from 'mongoose';
-import type { TimetableSlot, Context } from '../interfaces';
+import { Model, ObjectID } from '@tsed/mongoose'
+import {Property, Required } from '@tsed/schema'
 
-export interface IDayTemplate extends Document {
-  type: string;
-  name: string;
-  activeDays: number[];
-  slots: TimetableSlot[]; // Use the actual interface
-  contexts: Context[];     // Use the actual interface
-  defaultProjectType?: string;
-}
+@Model()
+export class DayTemplate {
 
-const DayTemplateSchema = new Schema<IDayTemplate>({
-  type: { type: String, required: true, unique: true },
-  name: { type: String, required: true },
-  activeDays: { type: [Number], default: [0, 1, 2, 3, 4, 5, 6], required: true },
-  slots: [{
+  @ObjectID()
+  _id!: string
+  @Property()
+  type!: { type: String, required: true, unique: true }
+  @Property()
+  name!: { type: String, required: true }
+  @Property()
+  activeDays!: { type: [Number], default: [0, 1, 2, 3, 4, 5, 6], required: true }
+  @Property()
+  slots!: [{
     type: { type: String, required: true, enum: ['slot'] },
     name: { type: String, required: true },
     start: { type: String, required: true },
     end: { type: String, required: true },
     // Add any other slot properties you need
-  }],
-  contexts: [{
+  }]
+  @Property()
+  contexts!: [{
     type: { type: String, required: true, enum: ['context'] },
     name: { type: String, required: true },
     start: { type: String, required: true },
     end: { type: String, required: true },
     // Add any other context properties you need
-  }],
-  defaultProjectType: String,
-}, { timestamps: true });
-
-export default mongoose.model<IDayTemplate>('DayTemplate', DayTemplateSchema);
+  }]
+  @Property()
+  defaultProjectType!: String
+}

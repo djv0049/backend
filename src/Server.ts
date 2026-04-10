@@ -1,4 +1,3 @@
-import 'dotenv/config';  // 👈 must be first, before everything else
 import { PlatformApplication } from "@tsed/common";
 import { Configuration, Inject } from "@tsed/di";
 import '@tsed/mongoose';
@@ -8,9 +7,11 @@ import compress from "compression";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import methodOverride from "method-override";
-
 import * as controllers from './controllers';
+import 'dotenv/config'; // 👈 must be first, before everything else
 
+
+console.log(process.env.MONGO_URL)
 @Configuration({
   rootDir: __dirname,
   acceptMimes: ["application/json"],
@@ -20,7 +21,7 @@ import * as controllers from './controllers';
     key: readFileSync(join(__dirname, "../certs/key.pem")),
     cert: readFileSync(join(__dirname, "../certs/cert.pem"))
   },*/
-  disableComponentsScan: true,
+  disableComponentsScan: false,
   mount: {
     '/': [...Object.values(controllers)]
   },
