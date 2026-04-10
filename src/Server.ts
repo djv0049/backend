@@ -10,11 +10,7 @@ import cors from "cors";
 import methodOverride from "method-override";
 
 import * as controllers from './controllers';
-console.log('🔍 Controllers Module:', Object.keys(controllers));
 
-
-// In the Configuration, add logging
-console.log("URL", process.env.MONGO_URL)
 @Configuration({
   rootDir: __dirname,
   acceptMimes: ["application/json"],

@@ -6,11 +6,6 @@ import { Server } from "./Server";
 async function bootstrap() {
   try {
     const platform = await PlatformExpress.bootstrap(Server);
-    // Add this:
-    // after bootstrap:
-    const injector = platform.injector;
-    const controllers = injector.getProviders('controller');
-    console.log('🎮 Registered controllers:', controllers.map((c: any) => c.token?.name));
     await platform.listen();
 
     $log.info("Server initialized");

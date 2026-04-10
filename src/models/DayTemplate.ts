@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
-import { TimetableSlot, Context } from '../interfaces';
+import type { TimetableSlot, Context } from '../interfaces';
 
 export interface IDayTemplate extends Document {
   type: string;

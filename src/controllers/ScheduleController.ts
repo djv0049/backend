@@ -1,29 +1,28 @@
-console.log('📁 ScheduleController FILE loaded');  // add this as line 1
-
-import { Controller, Get } from '@tsed/common';
+import { BodyParams, Controller, Get, Patch, PathParams, QueryParams } from '@tsed/common';
+import moment from 'moment';
+import { DayTemplate } from '../models';
+import DailyTaskInstance from '../models/DailyTaskInstance';
+import TaskTemplate from '../models/TaskTemplate';
+import { generateScheduleLogic } from '../utils/scheduler';
 
 @Controller('/schedule')
-
 export class ScheduleController {
-  constructor() {
-    console.log('✅ ScheduleController registered');
-  }
-@Get('/')
-  async getSchedule() {
-    return { ok: true }; // stub it out to rule out import errors
-  }
-  /*
-  @Get('/schedule')
+  @Get('/')
   async getSchedule(@QueryParams('date') date: string) {
     try {
       if (!date) {
         return { error: 'Date required' };
       }
 
-      const currentDate = moment(date);
+      const currentDate = moment(date, "YYYY-MM-DD");
+    console.log(currentDate)
       const dayOfWeek = currentDate.day();
 
+      const allDayTemplates = await DayTemplate.find({})
+      console.log(allDayTemplates)
+      console.log(dayOfWeek)
       const dayTemplate = await DayTemplate.findOne({ activeDays: dayOfWeek });
+      console.log(dayTemplate)
       if (!dayTemplate) {
         return { tasks: [], dayTemplate: null };
       }
@@ -79,5 +78,5 @@ export class ScheduleController {
     } catch (err) {
       return { error: 'Update failed' };
     }
-  }*/
+  }
 }
