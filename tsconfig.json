@@ -17,6 +17,6 @@
     "declarationMap": true,
     "sourceMap": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "scripts/seed.js"],
   "exclude": ["node_modules", "dist"]
 }

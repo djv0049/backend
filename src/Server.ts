@@ -1,31 +1,37 @@
-import { Configuration, Inject } from "@tsed/di";
+import 'dotenv/config';  // 👈 must be first, before everything else
 import { PlatformApplication } from "@tsed/common";
+import { Configuration, Inject } from "@tsed/di";
+import '@tsed/mongoose';
 import "@tsed/platform-express";
 import bodyParser from "body-parser";
 import compress from "compression";
 import cookieParser from "cookie-parser";
-import methodOverride from "method-override";
 import cors from "cors";
-import '@tsed/mongoose'
-import * as controllers from "../src/controllers"
-import { readFileSync } from "fs";
-import { join } from "path";
-import 'dotenv/config';
+import methodOverride from "method-override";
 
-console.log(process.env.MONGO_URL)
+import * as controllers from './controllers';
+console.log('🔍 Controllers Module:', Object.keys(controllers));
+
+
+// In the Configuration, add logging
+console.log("URL", process.env.MONGO_URL)
 @Configuration({
   rootDir: __dirname,
   acceptMimes: ["application/json"],
   httpPort: 3002,
-  httpsPort: process.env.PORT || 443,
+  /*httpsPort: process.env.PORT || 443,
   httpsOptions: {
     key: readFileSync(join(__dirname, "../certs/key.pem")),
     cert: readFileSync(join(__dirname, "../certs/cert.pem"))
-  },
-  disableComponentsScan: false,
+  },*/
+  disableComponentsScan: true,
   mount: {
-    '/': [...Object.values(controllers)],
+    '/': [...Object.values(controllers)]
   },
+
+  /*mount: {
+    '/': [ScheduleController], // Hardcode them
+  },*/
   mongoose: [
     {
       id: 'default',
