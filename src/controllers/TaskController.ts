@@ -1,19 +1,28 @@
-import { Request, Response } from 'express';
-import DailyTaskInstance from '../models/DailyTaskInstance';
+import { BodyParams, Controller, Inject, Patch, PathParams } from '@tsed/common';
+import { MongooseModel } from '@tsed/mongoose';
+import { DailyTaskInstance } from '../models/DailyTaskInstance';
 
-export const updateTaskStatus = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const { status, remainingTime } = req.body;
-    
-    const task = await DailyTaskInstance.findByIdAndUpdate(
-      id,
-      { status, remainingTime, startedAt: status === 'in-progress' ? new Date() : undefined },
-      { new: true }
-    );
-    
-    res.json(task);
-  } catch (err) {
-    res.status(500).json({ error: 'Update failed' });
+@Controller('/tasks')
+export class TaskController {
+  @Inject(DailyTaskInstance)
+  private dailyTaskInstance!: MongooseModel<DailyTaskInstance>;
+
+  @Patch('/:id')
+  async updateTaskStatus(@PathParams('id') id: string, @BodyParams() body: any) {
+    try {
+      const task = await this.dailyTaskInstance.findByIdAndUpdate(
+        id,
+        {
+          status: body.status,
+          remainingTime: body.remainingTime,
+          startedAt: body.status === 'in-progress' ? new Date() : undefined,
+          completedAt: body.status === 'completed' ? new Date() : undefined
+        },
+        { new: true }
+      );
+      return task;
+    } catch (err) {
+      return { error: 'Update failed' };
+    }
   }
-};
+}

@@ -1,61 +1,44 @@
-
-import { ObjectID, Model } from '@tsed/mongoose';
+import { Model, ObjectID } from '@tsed/mongoose';
 import { Property } from '@tsed/schema';
-import mongoose, { Schema, Document, Types } from 'mongoose';
-
-export interface IDailyTaskInstance extends Document {
-  schedule_id: Types.ObjectId; // Reference to DailySchedule
-  taskTemplateId: Types.ObjectId; // Reference to TaskTemplate
-  type: string; // Semantic type (e.g., "Brush Teeth")
-  title: string; // Display title
-  
-  // Time slots
-  slotType?: string; 
-  contextType?: string;
-  startTime: string; // "08:00"
-  endTime: string;   // "08:15"
-  
-  // Status & Timer
-  status: 'pending' | 'in-progress' | 'completed';
-  remainingTime: number; // Seconds (for the countdown)
-  completedAt?: Date;
-  startedAt?: Date;
-}
 
 @Model()
-export class DailyTaskInstance{
+export class DailyTaskInstance {
   @ObjectID()
-  _id!: string
+  _id!: string;
 
   @Property()
-  schedule_id?: { type: Schema.Types.ObjectId, ref: 'DailySchedule', required: true, index: true }
+  schedule_id?: string;
+
   @Property()
-  taskTemplateId!: { type: Schema.Types.ObjectId, ref: 'TaskTemplate', required: true }
+  taskTemplateId!: string;
+
   @Property()
-  type!: { type: String, required: true }
+  type!: string;
+
   @Property()
-  title!: { type: String, required: true }
-  
+  title!: string;
+
   @Property()
-  slotType?: String
+  slotType?: string;
+
   @Property()
-  contextType?: String
-  
+  contextType?: string;
+
   @Property()
-  startTime?: { type: String, required: true }
+  startTime!: string;
+
   @Property()
-  endTime?: { type: String, required: true }
-  
+  endTime!: string;
+
   @Property()
-  status?: { 
-    type: String, 
-    enum: ['pending', 'in-progress', 'completed'], 
-    default: 'pending' 
-  }
+  status!: 'pending' | 'in-progress' | 'completed';
+
   @Property()
-  remainingTime?: { type: Number, default: 0 }
+  remainingTime!: number;
+
   @Property()
-  completedAt?: Date
+  completedAt?: Date;
+
   @Property()
-  startedAt?: Date
-} 
+  startedAt?: Date;
+}

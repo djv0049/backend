@@ -1,54 +1,44 @@
-import { ObjectID } from '@tsed/mongoose';
+import { Model, ObjectID } from '@tsed/mongoose';
 import { Property } from '@tsed/schema';
-import { Document } from 'mongoose';
 
-export interface ITaskTemplate extends Document {
-  type: string; // Unique identifier (e.g., "Brush Teeth")
-  name: string;
-  duration: number; // in minutes
-  recurrence: 'daily' | 'weekly' | 'one-off' | 'monthly';
-  // Optional links to other templates
-  projectType?: string;
-  slotType?: string;
-  contextType?: string;
-  // TODO: link to template taskListOrder TBI
-  // Priority weights for the scheduler
-  slotPriority: number;
-  contextPriority: number;
-  projectPriority: number;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
+@Model()
 export class TaskTemplate {
   @ObjectID()
-  _id!: string
+  _id!: string;
+
   @Property()
-  type!: {
-    type: String,
-    required: true,
-    unique: true // Ensures "Brush Teeth" doesn't appear twice
-  }
+  type!: string;
+
   @Property()
-  name!: { type: String, required: true }
+  name!: string;
+
   @Property()
-  duration!: { type: Number, required: true, min: 1 }
+  duration!: number;
+
   @Property()
-  recurrence!: {
-    type: String,
-    enum: ['daily', 'weekly', 'one-off', 'monthly'],
-    default: 'daily'
-  }
+  recurrence!: 'daily' | 'weekly' | 'one-off' | 'monthly';
+
   @Property()
-  projectType!: String
+  projectType?: string;
+
   @Property()
-  slotType!: String
+  slotType?: string;
+
   @Property()
-  contextType!: String
+  contextType?: string;
+
   @Property()
-  slotPriority!: { type: Number, default: 5 }
+  slotPriority!: number;
+
   @Property()
-  contextPriority!: { type: Number, default: 5 }
+  contextPriority!: number;
+
   @Property()
-  projectPriority!: { type: Number, default: 0 }
+  projectPriority!: number;
+
+  @Property()
+  createdAt!: Date;
+
+  @Property()
+  updatedAt!: Date;
 }

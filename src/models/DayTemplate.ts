@@ -1,31 +1,36 @@
-import { Model, ObjectID } from '@tsed/mongoose'
-import {Property, Required } from '@tsed/schema'
+import { Model, ObjectID } from '@tsed/mongoose';
+import { Property } from '@tsed/schema';
 
 @Model()
 export class DayTemplate {
-
   @ObjectID()
-  _id!: string
+  _id!: string;
+
   @Property()
-  type!: { type: String, required: true, unique: true }
+  type!: string;
+
   @Property()
-  name!: { type: String, required: true }
+  name!: string;
+
   @Property()
-  activeDays!: number[]
+  activeDays!: number[];
+
   @Property()
   slots!: Array<{
-    type: { type: String, required: true, enum: ['slot'] },
-    name: { type: String, required: true },
-    start: { type: String, required: true },
-    end: { type: String, required: true },
-  }>
+    type: string;
+    name: string;
+    start: string;
+    end: string;
+  }>;
+
   @Property()
   contexts!: Array<{
-    type: { type: String, required: true, enum: ['context'] },
-    name: { type: String, required: true },
-    start: { type: String, required: true },
-    end: { type: String, required: true },
-  }>
+    type: string;
+    name: string;
+    start: string;
+    end: string;
+  }>;
+
   @Property()
-  defaultProjectType!: String
+  defaultProjectType?: string;
 }
