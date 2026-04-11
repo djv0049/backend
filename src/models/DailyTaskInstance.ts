@@ -1,4 +1,6 @@
 
+import { ObjectID, Model } from '@tsed/mongoose';
+import { Property } from '@tsed/schema';
 import mongoose, { Schema, Document, Types } from 'mongoose';
 
 export interface IDailyTaskInstance extends Document {
@@ -20,26 +22,40 @@ export interface IDailyTaskInstance extends Document {
   startedAt?: Date;
 }
 
-const DailyTaskInstanceSchema = new Schema<IDailyTaskInstance>({
-  schedule_id: { type: Schema.Types.ObjectId, ref: 'DailySchedule', required: true, index: true },
-  taskTemplateId: { type: Schema.Types.ObjectId, ref: 'TaskTemplate', required: true },
-  type: { type: String, required: true },
-  title: { type: String, required: true },
+@Model()
+export class DailyTaskInstance{
+  @ObjectID()
+  _id!: string
+
+  @Property()
+  schedule_id?: { type: Schema.Types.ObjectId, ref: 'DailySchedule', required: true, index: true }
+  @Property()
+  taskTemplateId!: { type: Schema.Types.ObjectId, ref: 'TaskTemplate', required: true }
+  @Property()
+  type!: { type: String, required: true }
+  @Property()
+  title!: { type: String, required: true }
   
-  slotType: String,
-  contextType: String,
+  @Property()
+  slotType?: String
+  @Property()
+  contextType?: String
   
-  startTime: { type: String, required: true },
-  endTime: { type: String, required: true },
+  @Property()
+  startTime?: { type: String, required: true }
+  @Property()
+  endTime?: { type: String, required: true }
   
-  status: { 
+  @Property()
+  status?: { 
     type: String, 
     enum: ['pending', 'in-progress', 'completed'], 
     default: 'pending' 
-  },
-  remainingTime: { type: Number, default: 0 },
-  completedAt: Date,
-  startedAt: Date,
-}, { timestamps: true });
-
-export default mongoose.model<IDailyTaskInstance>('DailyTaskInstance', DailyTaskInstanceSchema);
+  }
+  @Property()
+  remainingTime?: { type: Number, default: 0 }
+  @Property()
+  completedAt?: Date
+  @Property()
+  startedAt?: Date
+} 

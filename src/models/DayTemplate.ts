@@ -11,23 +11,21 @@ export class DayTemplate {
   @Property()
   name!: { type: String, required: true }
   @Property()
-  activeDays!: { type: [Number], default: [0, 1, 2, 3, 4, 5, 6], required: true }
+  activeDays!: number[]
   @Property()
-  slots!: [{
+  slots!: Array<{
     type: { type: String, required: true, enum: ['slot'] },
     name: { type: String, required: true },
     start: { type: String, required: true },
     end: { type: String, required: true },
-    // Add any other slot properties you need
-  }]
+  }>
   @Property()
-  contexts!: [{
+  contexts!: Array<{
     type: { type: String, required: true, enum: ['context'] },
     name: { type: String, required: true },
     start: { type: String, required: true },
     end: { type: String, required: true },
-    // Add any other context properties you need
-  }]
+  }>
   @Property()
   defaultProjectType!: String
 }

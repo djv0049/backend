@@ -2,14 +2,16 @@ import { BodyParams, Controller, Get, Inject, Patch, PathParams, QueryParams } f
 import moment from 'moment';
 import { MongooseModel } from '@tsed/mongoose'
 import { DayTemplate } from '../models';
-import DailyTaskInstance from '../models/DailyTaskInstance';
+import { DailyTaskInstance } from '../models/DailyTaskInstance';
 import TaskTemplate from '../models/TaskTemplate';
 import { generateScheduleLogic } from '../utils/scheduler';
+import { TimetableSlot, Context } from '../interfaces';
 
 @Controller('/schedule')
 export class ScheduleController {
   @Inject(DayTemplate)
   private dayTemplate!: MongooseModel<DayTemplate>
+  private dailyTaskInstance!: MongooseModel<DailyTaskInstance>
 
   @Get('/')
   async getSchedule(@QueryParams('date') date: string) {
@@ -19,17 +21,9 @@ export class ScheduleController {
       }
 
       const currentDate = moment(date, "YYYY-MM-DD");
-      console.log(currentDate)
       const dayOfWeek = currentDate.day();
 
-      console.log(process.env.MONGO_URL)
-      const dayTemplateFound = await this.dayTemplate.findOne({ activeDays: dayOfWeek });
-      console.log(dayTemplateFound)
-      if (!dayTemplateFound) {
-        return { tasks: [], dayTemplate: null };
-      }
-
-      const existingTasks = await DailyTaskInstance.find({ date: currentDate.toDate() }).lean();
+      const existingTasks = await this.dailyTaskInstance.find({ date: currentDate.toDate() }).lean();
       const pendingTasks = existingTasks.filter((t: any) => t.status === 'pending');
       const activeTasks = existingTasks.filter((t: any) => t.status === 'in-progress');
       const completedTasks = existingTasks.filter((t: any) => t.status === 'completed');
@@ -39,20 +33,54 @@ export class ScheduleController {
 
       if (needsGeneration) {
         const templates = await TaskTemplate.find({ recurrence: { $in: ['daily', 'weekly'] } });
+
+        const dayTemplateFound = await this.dayTemplate.findOne({ activeDays: dayOfWeek });
+        console.log(dayTemplateFound)
+        if (!dayTemplateFound) {
+          return { tasks: [], dayTemplate: null };
+        }
+
+
+        // Convert slots to TimetableSlot format
+        const windows: (TimetableSlot | Context)[] = dayTemplateFound.slots.map((s: any) => ({
+          type: 'slot',
+          name: s.name,
+          icon: '',
+          startTime: s.start,
+          endTime: s.end,
+          flexiStart: false,
+          flexiEnd: false
+        }));
+
         finalPendingTasks = await generateScheduleLogic({
-          windows: dayTemplateFound.slots.map((s: DayTemplate) => ({ ...s, type: 'slot' } as DayTemplate)),
+          windows,
           templates,
           date: currentDate.toDate()
         });
-        await DailyTaskInstance.insertMany(finalPendingTasks);
+        await this.dailyTaskInstance.insertMany(finalPendingTasks);
       } else {
+        const dayTemplateFound = await this.dayTemplate.findOne({ activeDays: dayOfWeek });
+        if (!dayTemplateFound) {
+          return { tasks: [], dayTemplate: null };
+        }
+        // Convert slots to TimetableSlot format
+        const windows: (TimetableSlot | Context)[] = dayTemplateFound.slots.map((s: any) => ({
+          type: 'slot',
+          name: s.name,
+          icon: '',
+          startTime: s.start,
+          endTime: s.end,
+          flexiStart: false,
+          flexiEnd: false
+        }));
+
         finalPendingTasks = await generateScheduleLogic({
-          windows: dayTemplateFound.slots.map((s: DayTemplate) => ({ ...s, type: 'slot' })),
+          windows,
           templates: pendingTasks,
           date: currentDate.toDate()
         });
         finalPendingTasks.forEach((t: any) => {
-          DailyTaskInstance.updateOne({ _id: t._id }, { startTime: t.startTime, endTime: t.endTime });
+          this.dailyTaskInstance.updateOne({ _id: t._id }, { startTime: t.startTime, endTime: t.endTime });
         });
       }
 
@@ -66,7 +94,7 @@ export class ScheduleController {
   @Patch('/daily-tasks/:id')
   async updateTaskStatus(@PathParams('id') id: string, @BodyParams() body: any) {
     try {
-      const task = await DailyTaskInstance.findByIdAndUpdate(
+      const task = await this.dailyTaskInstance.findByIdAndUpdate(
         id,
         {
           status: body.status,
