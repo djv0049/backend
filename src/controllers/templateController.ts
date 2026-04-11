@@ -1,20 +1,24 @@
 import { Controller, Post, Get, BodyParams } from '@tsed/common';
-import { Injectable } from '@tsed/di';
-import TaskTemplateModel from '../models/TaskTemplate';
+import { Inject, Injectable } from '@tsed/di';
+import {  TaskTemplate as TaskTemplateModel } from '../models/TaskTemplate';
 import type { TaskTemplate } from '../interfaces';
+import { MongooseModel } from '@tsed/mongoose';
 
-@Controller('/api')
+@Controller('/templates')
 @Injectable()
+@Inject(TaskTemplateModel)
 export class TemplateController {
-  @Get('/templates')
+  private taskTemplateModel!: MongooseModel<TaskTemplate> 
+  @Get('/')
   async getTemplates() {
-    return TaskTemplateModel.find();
+    console.log("getting templates")
+    return this.taskTemplateModel.find({});
   }
 
-  @Post('/templates')
+  @Post('/')
   async createTemplate(@BodyParams() template: Partial<TaskTemplate>) {
     try {
-      const newTemplate = new TaskTemplateModel(template);
+      const newTemplate = new TaskTemplate(template);
       await newTemplate.save();
       return newTemplate;
     } catch (err) {

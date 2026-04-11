@@ -3,15 +3,18 @@ import moment from 'moment';
 import { MongooseModel } from '@tsed/mongoose'
 import { DayTemplate } from '../models';
 import { DailyTaskInstance } from '../models/DailyTaskInstance';
-import TaskTemplate from '../models/TaskTemplate';
+import { TaskTemplate } from '../models/TaskTemplate';
 import { generateScheduleLogic } from '../utils/scheduler';
 import { TimetableSlot, Context } from '../interfaces';
 
 @Controller('/schedule')
 export class ScheduleController {
-  @Inject(DayTemplate)
+  @Inject(DayTemplate,)
+  @Inject(DailyTaskInstance)
   private dayTemplate!: MongooseModel<DayTemplate>
   private dailyTaskInstance!: MongooseModel<DailyTaskInstance>
+  private taskTemplate!: MongooseModel<TaskTemplate>
+  
 
   @Get('/')
   async getSchedule(@QueryParams('date') date: string) {
@@ -19,11 +22,14 @@ export class ScheduleController {
       if (!date) {
         return { error: 'Date required' };
       }
+        //const templates = await TaskTemplate.find({ recurrence: { $in: ['daily', 'weekly'] } });
+      //console.log(templates)
 
       const currentDate = moment(date, "YYYY-MM-DD");
       const dayOfWeek = currentDate.day();
 
       const existingTasks = await this.dailyTaskInstance.find({ date: currentDate.toDate() }).lean();
+      console.log(existingTasks)
       const pendingTasks = existingTasks.filter((t: any) => t.status === 'pending');
       const activeTasks = existingTasks.filter((t: any) => t.status === 'in-progress');
       const completedTasks = existingTasks.filter((t: any) => t.status === 'completed');
@@ -32,9 +38,9 @@ export class ScheduleController {
       let finalPendingTasks = pendingTasks;
 
       if (needsGeneration) {
-        const templates = await TaskTemplate.find({ recurrence: { $in: ['daily', 'weekly'] } });
-
+        const templates = await this.taskTemplate.find({ recurrence: { $in: ['daily', 'weekly'] } });
         const dayTemplateFound = await this.dayTemplate.findOne({ activeDays: dayOfWeek });
+
         console.log(dayTemplateFound)
         if (!dayTemplateFound) {
           return { tasks: [], dayTemplate: null };

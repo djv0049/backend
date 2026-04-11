@@ -5,3 +5,4 @@ certs/
 *.log
 .env
 .DS_Store
+.aider*

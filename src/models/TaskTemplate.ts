@@ -1,4 +1,6 @@
-import mongoose, { Schema, Document, Types } from 'mongoose';
+import { ObjectID } from '@tsed/mongoose';
+import { Property } from '@tsed/schema';
+import { Document } from 'mongoose';
 
 export interface ITaskTemplate extends Document {
   type: string; // Unique identifier (e.g., "Brush Teeth")
@@ -18,25 +20,35 @@ export interface ITaskTemplate extends Document {
   updatedAt: Date;
 }
 
-const TaskTemplateSchema = new Schema<ITaskTemplate>({
-  type: {
+export class TaskTemplate {
+  @ObjectID()
+  _id!: string
+  @Property()
+  type!: {
     type: String,
     required: true,
     unique: true // Ensures "Brush Teeth" doesn't appear twice
-  },
-  name: { type: String, required: true },
-  duration: { type: Number, required: true, min: 1 },
-  recurrence: {
+  }
+  @Property()
+  name!: { type: String, required: true }
+  @Property()
+  duration!: { type: Number, required: true, min: 1 }
+  @Property()
+  recurrence!: {
     type: String,
     enum: ['daily', 'weekly', 'one-off', 'monthly'],
     default: 'daily'
-  },
-  projectType: String,
-  slotType: String,
-  contextType: String,
-  slotPriority: { type: Number, default: 5 },
-  contextPriority: { type: Number, default: 5 },
-  projectPriority: { type: Number, default: 0 },
-}, { timestamps: true });
-
-export default mongoose.model<ITaskTemplate>('TaskTemplate', TaskTemplateSchema);
+  }
+  @Property()
+  projectType!: String
+  @Property()
+  slotType!: String
+  @Property()
+  contextType!: String
+  @Property()
+  slotPriority!: { type: Number, default: 5 }
+  @Property()
+  contextPriority!: { type: Number, default: 5 }
+  @Property()
+  projectPriority!: { type: Number, default: 0 }
+}
