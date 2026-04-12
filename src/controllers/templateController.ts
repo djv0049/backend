@@ -1,7 +1,8 @@
-import { Controller, Post, Get, BodyParams } from '@tsed/common';
+// src/controllers/TemplateController.ts
+import { Controller, Post, Get, BodyParams, Delete, PathParams, QueryParams } from '@tsed/common';
 import { Inject, Injectable } from '@tsed/di';
 import { TaskTemplate as TaskTemplateModel } from '../models/TaskTemplate';
-import type { TaskTemplate } from '../interfaces';
+import { DayTemplate as DayTemplateModel } from '../models/DayTemplate';
 import { MongooseModel } from '@tsed/mongoose';
 
 @Controller('/templates')
@@ -10,21 +11,42 @@ export class TemplateController {
   @Inject(TaskTemplateModel)
   private taskTemplateModel!: MongooseModel<TaskTemplate>;
 
+  @Inject(DayTemplateModel)
+  private dayTemplateModel!: MongooseModel<DayTemplate>;
+
+  // 1. GET All Task Templates (Tasks)
   @Get('/')
-  async getTemplates() {
-    console.log('getting templates');
+  async getTaskTemplates() {
     return this.taskTemplateModel.find({});
   }
 
+  // 2. POST Task Template (Task)
   @Post('/')
-  async createTemplate(@BodyParams() template: Partial<TaskTemplate>) {
-    try {
-      const newTemplate = new TaskTemplateModel();
+  async createTaskTemplate(@BodyParams() template: Partial<TaskTemplate>) {
+    return this.taskTemplateModel.create({...template});
+  }
 
-      await this.taskTemplateModel.create({...template})
-      return newTemplate;
-    } catch (err) {
-      return { error: 'Creation failed' };
-    }
+  // 3. DELETE Task Template
+  @Delete('/:id')
+  async deleteTaskTemplate(@PathParams('id') id: string) {
+    return this.taskTemplateModel.findByIdAndDelete(id);
+  }
+
+  // 4. NEW: GET Day Templates (Slots/Contexts/Projects)
+  @Get('/day-templates')
+  async getDayTemplates() {
+    return this.dayTemplateModel.find({});
+  }
+
+  // 5. NEW: POST Day Template (Save Slots/Contexts)
+  @Post('/day-templates')
+  async createDayTemplate(@BodyParams() dayTemplate: Partial<DayTemplate>) {
+    return this.dayTemplateModel.create({...dayTemplate});
+  }
+  
+  // 6. NEW: UPDATE Day Template
+  @Put('/day-templates/:id')
+  async updateDayTemplate(@PathParams('id') id: string, @BodyParams() dayTemplate: Partial<DayTemplate>) {
+    return this.dayTemplateModel.findByIdAndUpdate(id, {...dayTemplate}, { new: true });
   }
 }

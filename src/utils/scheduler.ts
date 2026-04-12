@@ -1,7 +1,8 @@
 // src/utils/scheduler.ts
 import { TimetableSlot, Context } from '../interfaces';
+import type { TaskTemplate } from '../models/TaskTemplate';
 
-// Helper: Convert "HH:mm" to minutes
+// Helper: Convert "HH:mm" to minutes from midnight
 const timeToMinutes = (timeStr: string): number => {
   const [h, m] = timeStr.split(':').map(Number);
   return (h * 60) + m;
@@ -23,10 +24,10 @@ export async function generateScheduleLogic({
   date
 }: {
   windows: (TimetableSlot | Context)[];
-  templates: any[]; // TaskTemplates or existing instances
+  templates: TaskTemplate[] | any[];
   date: Date;
 }) {
-  // 1. Sort Tasks by Weight
+  // 1. Sort Tasks by Weight (Highest Priority First)
   const sortedTasks = [...templates].sort((a, b) => calculateWeight(b) - calculateWeight(a));
   
   // 2. Sort Windows by Start Time
@@ -44,29 +45,27 @@ export async function generateScheduleLogic({
       const wStart = timeToMinutes(w.startTime);
       const wEnd = timeToMinutes(w.endTime);
       
-      // Check if window is after current time AND has enough room
+      // Check if window has enough room
       const hasRoom = (wEnd - wStart) >= task.duration;
       
-      // Simple Matching Logic (adapt to your specific needs)
+      // Matching Logic
       const matchesContext = !task.contextType || w.type === task.contextType;
       const matchesSlot = !task.slotType || w.type === task.slotType;
 
-      return matchesContext && matchesSlot && hasRoom;
+      // FIXME: logic for showing only contexts, and matching more having higer priority {return a number along with the object, for weighted matches}
+      return hasRoom && matchesContext && matchesSlot;
     });
 
     if (fitWindow) {
-      // Assign task
+      // Assign task to the start of the window
       scheduled.push({
         ...task,
         startTime: fitWindow.startTime,
         endTime: fitWindow.endTime,
         date: date,
         status: 'pending' as const,
-        remainingTime: 0 // Initialize to 0
+        remainingTime: 0 // Initialize to 0, will be calculated by duration * 60 if needed
       });
-      
-      // Update internal clock for next task (simplified logic)
-      currentTime += task.duration;
     }
   }
 

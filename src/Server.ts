@@ -10,6 +10,8 @@ import methodOverride from "method-override";
 import * as controllers from './controllers';
 import 'dotenv/config'; // 👈 must be first, before everything else
 
+console.log("Starting Server...");
+console.log("MONGO_URL:", process.env.MONGO_URL ? "✅ Set" : "❌ Missing");
 
 console.log(process.env.MONGO_URL)
 @Configuration({
@@ -26,25 +28,25 @@ console.log(process.env.MONGO_URL)
     '/': [...Object.values(controllers)]
   },
 
-  /*mount: {
-    '/': [ScheduleController], // Hardcode them
-  },*/
   mongoose: [
     {
       id: 'default',
       url: process.env.MONGO_URL || '',
-      connectionOptions: {},
+      connectionOptions: {
+      },
     },
   ],
   middlewares: [
-    cors(),
+    cors({
+      origin: ['http://localhost:5173'],
+      methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+      credentials: true
+    }),
+    bodyParser.json(),
+    bodyParser.urlencoded({ extended: true }),
     cookieParser(),
     compress({}),
-    methodOverride(),
-    bodyParser.json(),
-    bodyParser.urlencoded({
-      extended: true
-    })
+    methodOverride()
   ]
 })
 export class Server {
