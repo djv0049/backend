@@ -1,9 +1,10 @@
 // src/controllers/TemplateController.ts
-import { Controller, Post, Get, BodyParams, Delete, PathParams, QueryParams } from '@tsed/common';
+import { Controller, Post, Get, BodyParams, Delete, PathParams, QueryParams, Put } from '@tsed/common';
 import { Inject, Injectable } from '@tsed/di';
-import { TaskTemplate as TaskTemplateModel } from '../models/TaskTemplate';
+import { TaskTemplate, TaskTemplate as TaskTemplateModel } from '../models/TaskTemplate';
 import { DayTemplate as DayTemplateModel } from '../models/DayTemplate';
 import { MongooseModel } from '@tsed/mongoose';
+import { DayTemplate } from '../interfaces.old';
 
 @Controller('/templates')
 @Injectable()

@@ -5,7 +5,7 @@ import { DayTemplate } from '../models/DayTemplate';
 import { DailyTaskInstance } from '../models/DailyTaskInstance';
 import { TaskTemplate } from '../models/TaskTemplate';
 import { generateScheduleLogic } from '../utils/scheduler';
-import { TimetableSlot, Context } from '../interfaces';
+import { TimetableSlot, Context } from '../interfaces.old';
 
 @Controller('/schedule')
 export class ScheduleController {

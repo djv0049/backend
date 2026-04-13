@@ -1,4 +1,4 @@
-import type { TaskTemplate, TimetableSlot, Context,  } from '../interfaces.ts';
+import type { TaskTemplate, TimetableSlot, Context,  } from '../interfaces.old.js';
 
 // Helper: Convert "HH:mm" to minutes from midnight
 const timeToMinutes = (timeStr: string): number => {

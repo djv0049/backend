@@ -1,5 +1,5 @@
 // src/utils/scheduler.ts
-import { TimetableSlot, Context } from '../interfaces';
+import { TimetableSlot, Context } from '../interfaces.old';
 import type { TaskTemplate } from '../models/TaskTemplate';
 
 // Helper: Convert "HH:mm" to minutes from midnight

@@ -1,68 +1,46 @@
-// Task Template (Library)
+import { Moment } from "moment"
+
 export interface TaskTemplate {
-  _id: string;
-  type: string; // Unique key (e.g., "Brush Teeth")
-  name: string;
-  duration: number;
-  recurrence: 'daily' | 'weekly' | 'one-off' | 'monthly';
-  projectType?: string;
-  slotType?: string;
-  contextType?: string;
-  slotPriority: number;
-  contextPriority: number;
-  projectPriority: number;
+  name: string
+  duration: number // seconds
+  isFlexible: boolean
+  
+  color?: string
+  miniContexts: [] // ids of the contexts involved
+  projects: []
+  conexts: []
 }
 
-// Day Template (Config)
-export interface DayTemplate {
-  _id: string;
-  type: string; // Unique key (e.g., "Monday")
-  name: string;
-  activeDays: number[];
-  slots: Array<{ name: string; start: string; end: string; type: string }>;
-  contexts: Array<{ name: string; start: string; end: string; type: string }>;
+export interface Task extends TaskTemplate{
+  startTime: Moment
+  endTime: Moment
+  completed: boolean
+  started: boolean
+  timeStarted: Moment
 }
 
-// Daily Schedule (The Day)
-export interface DailySchedule {
-  _id: string;
-  user_id: string;
-  date: Date;
-  dayTemplateId: string;
-  status: 'generated' | 'manual' | 'archived';
+export interface ContextTemplate{ // define the base context, not the actual implimentation
+  name: string
+  icon: string
+  color: string
+  tasks: TaskTemplate[]
+
 }
 
-// Task Instance (The Agenda)
-export interface DailyTaskInstance {
-  _id: string;
-  schedule_id: string;
-  taskTemplateId: string;
-  type: string;
-  title: string;
-  slotType?: string;
-  contextType?: string;
-  startTime: string;
-  endTime: string;
-  status: 'pending' | 'in-progress' | 'completed';
-  remainingTime: number; // Seconds
-  completedAt?: Date;
+export interface MiniContext { // contexts like walking or being in a meeting or driving or gaming or coding. accessible and switchable. 
+  startTime: Moment
+  endTime: Moment
+  flexiStart: boolean
+  flexiEnd: boolean
+
+
 }
 
-export interface TimetableSlot {
-  type: string;
-  name: string;
-  icon: string;
-  startTime: string;
-  endTime: string;
+
+export interface Context { // like at home, at work, at dads, geraldine.. and other common overarching influences on daily activities
+  startTime: Moment
+  endTime: Moment
+  
+
 }
 
-// 2. Context (Dynamic/Overrideable)
-export interface Context {
-  type: string;
-  name: string;
-  icon: string;
-  startTime: string;
-  endTime: string;
-  flexiStart: boolean;
-  flexiEnd: boolean;
-}
