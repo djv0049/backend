@@ -1,54 +1,64 @@
-import { Inject, Controller, Post, BodyParams, Get, Put, Delete } from "@tsed/common";
-import { MongooseModel } from "@tsed/mongoose";
-import { Task } from "../entities/Task";
-import { error } from "console";
+// src/controllers/TaskController.ts
+import { BodyParams, Controller, Get, Inject, Patch, PathParams, Put } from '@tsed/common';
+import { MongooseModel } from '@tsed/mongoose';
+import { Task, TaskTemplate } from '../entities/';
 
-export class CreateTaskDto {
-  name!: string;
-  priority!: number;
-  startTime?: Date;
-  endTime?: Date;
-}
-
-@Controller("/task")
+@Controller('/daily-tasks')
 export class TaskController {
   @Inject(Task)
-  private taskModel!: MongooseModel<Task>;
+  private taskInstance!: MongooseModel<Task>;
+  @Inject(TaskTemplate)
+  private taskTemplate!: MongooseModel<TaskTemplate>
 
-  @Get("/")
-  async getAllTasks() {
-    return await this.taskModel.find()
-  }
-  @Post("/")
-  async create(@BodyParams() body: JSON): Promise<Task> {
-    return await this.taskModel.create({
-      ...body,
-      createdAt: new Date()
-    });
-  }
-
-  @Put("/")
-  async updateTask(@BodyParams() body: Task): Promise<Task | null> {
-    const filter = { _id: body._id }
-    const updates = { $set: body }
-    const result = await this.taskModel.updateOne(filter, updates)
-    if (result.acknowledged)
-      return body
-    else return null
-  }
-
-  @Delete("/")
-  async deleteTask(@BodyParams() body: Task): Promise<Task | null> {
-    const filter = { _id: body._id }
-    const updates = { $set: body }
-    const result = await this.taskModel.deleteOne(filter, updates)
-    if (result.acknowledged)
-      return body
-    else return null
+  @Patch('/:id')
+  async updateTaskStatus(@PathParams('id') id: string, @BodyParams() body: any) {
+    try {
+      const task = await this.taskInstance.findByIdAndUpdate(
+        id,
+        {
+          status: body.status,
+          completedAt: body.completedAt,
+          timeStarted: body.timeStarted
+        },
+        { new: true }
+      );
+      return task;
+    } catch (err) {
+      console.error(err);
+      return { error: 'Update failed' };
+    }
   }
 
-  @Get("/test")
-  async test() {
-    return { working: "yes" }
+  @Put('/')
+  async createTask(@BodyParams() body: any) {
+    try {
+      const { name, duration, isFlexible, repeating, frequency, miniContexts, projects, contexts } = body
+      const task = await this.taskTemplate.create(
+        {
+          name: name,
+          duration: duration || 300,
+          isFlexible: isFlexible || false,
+          repeating: repeating,
+          frequency: repeating ? frequency : null,
+          miniContexts: miniContexts,
+          projects: projects,
+          conexts: contexts
+        } as TaskTemplate,
+      );
+      return task;
+    } catch (err) {
+      console.error(err);
+      return { error: 'Create task failed' };
+    }
+  }
+
+  @Get('/')
+  async getTasks() {
+    try {
+      return this.taskInstance.find({})
+    } catch (err) {
+      console.error(err);
+      return { error: 'fetch task failed' };
+    }
   }
 }

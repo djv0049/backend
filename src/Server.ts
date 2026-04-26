@@ -17,11 +17,11 @@ console.log(process.env.MONGO_URL)
   rootDir: __dirname,
   acceptMimes: ["application/json"],
   httpPort: 3002,
-  httpsPort: process.env.PORT || 443,
+  /*httpsPort: process.env.PORT || 443,
   httpsOptions: {
     key: readFileSync(join(__dirname, "../certs/key.pem")),
     cert: readFileSync(join(__dirname, "../certs/cert.pem"))
-  },
+  },*/
   disableComponentsScan: false,
   mount: {
     '/': [...Object.values(controllers)],

@@ -1,41 +1,50 @@
-import { Model, ObjectID } from "@tsed/mongoose";
-import { Property, Required } from "@tsed/schema";
+import { Model } from '@tsed/mongoose';
+import { Property } from '@tsed/schema';
+import { Frequency, TaskTemplate } from './TaskTemplate';
+import { Moment } from 'moment';
+import { IContext, IMiniContext } from '../interfaces';
 
 @Model()
-export class Task {
-  @ObjectID()
-  _id!: string;
+export class Task extends TaskTemplate {
+  @Property(Date)
+  startTime!: Moment;
 
-  @Required()
-  name!: string;
+  @Property(Date)
+  endTime!: Moment;
 
-  @Property()
-  startTime?: string;
-
-  @Property()
-  endTime?: string;
+  @Property(Date)
+  completedAt!: Moment;
 
   @Property()
-  date?: Date;
+  started!: boolean;
+
+  @Property(Date)
+  timeStarted!: Moment;
 
   @Property()
-  createdAt!: Date;
+  name!: string
 
   @Property()
-  lastModified?: {date: Date, action: string};
+  duration!: number // seconds
+  
+  @Property()
+  isFlexible!: boolean
 
   @Property()
-  isStreak!: boolean;
+  repeating!: boolean
 
   @Property()
-  streakCount?: number;
+  frequency!: Frequency
 
   @Property()
-  timeframes?: []
+  miniContexts?: IMiniContext[] // ids of the contexts involved
 
   @Property()
-  repeatingFrequency?: string;
+  projects?: []
 
   @Property()
-  repeatingFrequencyCount?: number;
+  contexts?: IContext[]
+
+  @Property()
+  score?: number
 }
