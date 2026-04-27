@@ -2,15 +2,17 @@ import { Model, ObjectID } from '@tsed/mongoose';
 import { Property } from '@tsed/schema';
 import { ContextTemplate } from './ContextTemplate';
 import { Moment } from 'moment';
+import { IContextTemplate, IMiniContextTemplate } from '../interfaces';
 
 @Model()
-export class Context extends ContextTemplate implements ContextTemplate {
+export class Context extends ContextTemplate implements IContextTemplate {
+
   @ObjectID()
   _id!: string;
 
-  @Property(Date)
-  startTime!: Moment;
+  @Property()
+  startTime!: string;
 
-  @Property(Date)
-  endTime!: Moment;
+  @Property()
+  endTime!: string;
 }
