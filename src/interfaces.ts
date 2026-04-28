@@ -1,5 +1,3 @@
-import { Moment } from "moment"
-
 interface IFrequency {
   count: number
   interval: 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years'
@@ -12,8 +10,8 @@ interface ITimeframeContainerTemplate {
 }
 
 export interface ITimeframeContainer extends ITimeframeContainerTemplate {
-  startTime: Moment
-  endTime: Moment
+  startTime: string
+  endTime: string
 }
 
 export interface ITaskTemplate {
@@ -29,14 +27,14 @@ export interface ITaskTemplate {
 }
 
 export interface ITask extends ITaskTemplate {
-  startTime: Moment
-  endTime: Moment
-  completedAt: Moment
+  startTime: string
+  endTime: string
+  completedAt: Date
   started: boolean
-  timeStarted: Moment
+  timeStarted: Date
 }
 
-interface IContextTemplate extends ITimeframeContainerTemplate {
+export interface IContextTemplate extends ITimeframeContainerTemplate {
   icon: string
 }
 
@@ -65,7 +63,7 @@ export interface IDayTemplate {
 }
 
 export interface IDay extends IDayTemplate {
-  date: Moment
+  date: Date
   tasks: ITask[]
 }
 

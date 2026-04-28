@@ -1,7 +1,7 @@
 import { Inject, Controller, Post, BodyParams, Get, Put, Delete } from "@tsed/common";
 import { QueryParams } from '@tsed/platform-params';
 import { MongooseModel } from '@tsed/mongoose';
-import moment, { Moment } from 'moment';
+import moment, { duration, Moment } from 'moment';
 import { TaskTemplate } from '../entities/TaskTemplate';
 //import { generateScheduleLogic } from '../utils/scheduler';
 import type { IContext, IMiniContext, ITaskTemplate } from '../interfaces';
@@ -84,11 +84,11 @@ export class ScheduleController {
       /* NOTE:
        *  list all tasks with a hard date
         */
-      const hardTimedTasks = this.task.find({ isFlexible: false })
-      console.log("listed all contexts...")
-      console.log(contexts.length)
-      console.log("listed all miniContexts...")
-      console.log(miniContexts.length)
+      const hardTimedTasks = this.taskTemplate.find({ isFlexible: false })
+      //console.log("listed all contexts...")
+      //console.log(contexts.length)
+      //console.log("listed all miniContexts...")
+      //console.log(miniContexts.length)
 
       /* TODO: 
        * calculate the presence of a container with its repeating phases and/or dates
@@ -110,13 +110,13 @@ export class ScheduleController {
             type: 'miniContext'
           } as ITimeframeContainerForSort))
       ]
-      console.log("all time containers")
-      console.log(allTimeContainers.length)
+      //console.log("all time containers")
+      //console.log(allTimeContainers.length)
       const timelineMap = allTimeContainers.reduce((acc: Record<string, IScheduleItem[]>, item: ITimeframeContainerForSort) => {
 
         const addEvent = (time: Moment, action: actionType) => {
-          console.log("time: ", time)
-          console.log("action: ", action)
+          //console.log("time: ", time)
+          //console.log("action: ", action)
           const newTime = `${time.hour().toString().padStart(2, '0')}:${time.minute().toString().padStart(2, '0')}`;
 
           if (!acc[newTime]) acc[newTime] = [];
@@ -126,9 +126,9 @@ export class ScheduleController {
             action: action,
             type: item.type
           });
-          console.log(acc)
+          //console.log(acc)
         };
-        console.log("ITEM", item)
+        //console.log("ITEM", item)
 
         addEvent(moment(item.startTime, 'HH:mm'), 'start');
         addEvent(moment(item.endTime, "HH:mm"), 'end');
@@ -136,8 +136,8 @@ export class ScheduleController {
         return acc;
       }, {} as Record<string, IScheduleItem[]>
       )
-      console.log("timeline map")
-      console.log(timelineMap)
+      //console.log("timeline map")
+      //console.log(timelineMap)
 
       const timeLineKeys = Object.keys(timelineMap)
       //console.log("keys timeline", timeLineKeys);
@@ -148,7 +148,7 @@ export class ScheduleController {
         events: timelineMap[time] as IScheduleItem[]
       }));
 
-      console.log("final timeline", timeLineMapped);
+      //console.log("final timeline", timeLineMapped);
       const timeLine = timeLineMapped
 
       const tasks = await this.task.find({})
@@ -178,7 +178,7 @@ export class ScheduleController {
               else if (m.action == 'end')
                 currentMiniContexts.filter(c => c != m.name)
           })
-          console.log("timeEntry events: ",timeEntry.time, ":", timeEntry.events)
+          //console.log("timeEntry events: ", timeEntry.time, ":", timeEntry.events)
         }
 
         // NOTE: filter all tasks by the tasks that have any of event.events.contexts matching any of their contexts. 
@@ -189,21 +189,31 @@ export class ScheduleController {
         // Next step is to filter by duration, 
 
         let timeTillNextEntry = timeDiff(nextEntry.time, cursor)
-        taskList.filter(t => {
-          return t.duration > timeTillNextEntry && !schedule.some(s => s.name === t.name)
+        taskList = taskList.filter(t => {
+          return t.duration < timeTillNextEntry && !schedule.some(s => s.name === t.name)
         })
-        console.log("time till next timeEntry", timeTillNextEntry)
-        console.log("taskList length", taskList.length)
-        while (timeTillNextEntry > 1 && taskList.length > 1) {
+        let unscheduledTasks = taskList
+        //console.log("time till next timeEntry", timeTillNextEntry)
+        //console.log("taskList length", taskList.length)
+        while (timeTillNextEntry > 0 
+          && unscheduledTasks.length > 0 
+          && moment(cursor, 'HH:mm').isBefore(moment('23:59', 'HH:mm'))
+          && !moment(cursor, 'HH:mm').isSame(moment('00:00', 'HH:mm'),'minute')
+          ) {
 
-          if (taskList.length === 0)
-            return
+          unscheduledTasks.filter(t => (t.duration > timeTillNextEntry) && (!schedule.find(s => s.name === t.name)))
+          //console.log("unscheduledTasks", unscheduledTasks.length)
+          //console.log("time till next entry:", timeTillNextEntry)
+          //console.log("cursor at start of while loop", cursor)
+
+          if (unscheduledTasks.length === 0)
+            break
 
           let newTaskList: Task[] = []
 
           // then give each task a priority weight.
           // .. count the current contexts that match.
-          taskList.forEach(task => {
+          unscheduledTasks.forEach(task => {
             let miniContextCount: number = 0
             let contextCount: number = 0
             if (task.miniContexts)
@@ -223,6 +233,7 @@ export class ScheduleController {
             const newtask = new Task()
             newtask.score = score
             newtask.name = task.name
+            newtask.duration = task.duration
             newtask.contexts = task.contexts
             newtask.miniContexts = task.miniContexts
             newTaskList.push(newtask)
@@ -235,14 +246,23 @@ export class ScheduleController {
             return aScore - bScore
           })
           const nextTask = newTaskList[0]
+          // console.log("next task",nextTask)
           nextTask.startTime = moment(cursor, 'HH:mm')
-          nextTask.endTime = moment(cursor, 'HH:mm').add(nextTask.duration)
-          cursor = moment(cursor, "HH:mm").add(nextTask.duration).format("HH:mm")
+          nextTask.endTime = moment(cursor, 'HH:mm').add(nextTask.duration, 'minutes')
+          cursor = moment(cursor, "HH:mm").add(nextTask.duration, 'minutes').format("HH:mm")
           schedule.push(nextTask)
+          //console.log("Schedule: ",schedule.length)
+          //console.log("cursor", cursor)
 
           timeTillNextEntry = timeDiff(nextEntry.time, cursor)
-          taskList.filter(t => {
-            return t.duration > timeTillNextEntry && !schedule.some(s => s.name === t.name)
+          //console.log(moment(cursor,"HH:mm"))
+            //console.log("schedule", schedule.length)
+            //console.log("task list ", unscheduledTasks.length)
+          unscheduledTasks = unscheduledTasks.filter(t => {
+            //console.log(t.duration, t.name)
+            //console.log(!schedule.some(s=> {return s.name == t.name}))
+            //console.log(t.duration > timeTillNextEntry)
+            return (t.duration > timeTillNextEntry) && (!schedule.find(s => s.name === t.name))
           })
         }
         // NOTE:
@@ -250,12 +270,13 @@ export class ScheduleController {
 
       }
 
+      console.log("Return Schedule", schedule)
       return schedule
     }
     catch (e) {
       console.error(e)
 
-      return []
+      return ['oops']
     }
   }
 }
