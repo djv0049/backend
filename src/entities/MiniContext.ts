@@ -5,9 +5,9 @@ import { IMiniContext } from '../interfaces';
 
 @Model()
 export class MiniContext extends MiniContextTemplate implements IMiniContext{
-  @Property(Date)
+  @Property()
   startTime!: string;
 
-  @Property(Date)
+  @Property()
   endTime!: string;
 }
