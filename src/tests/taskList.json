@@ -1,0 +1,420 @@
+[
+  {
+    "name": "affirmations",
+    "number": "1",
+    "duration": "2",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getReadyForWork"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "eat breakfast",
+    "number": "2",
+    "duration": "8",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getReadyForWork"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "take meds",
+    "number": "4",
+    "duration": "2",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getReadyForWork"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "drink water",
+    "number": "5",
+    "duration": "1",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getReadyForWork"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "brush teeth",
+    "number": "6",
+    "duration": "3",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getReadyForWork"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "shower",
+    "number": "6",
+    "duration": "12",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getReadyForWork"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "deoderant",
+    "number": "7",
+    "duration": "1",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getReadyForWork"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "get dressed",
+    "number": "8",
+    "duration": "4",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getReadyForWork"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "pack bag (checklist)",
+    "number": "9",
+    "duration": "8",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getReadyForWork"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "stretch",
+    "number": "10",
+    "duration": "5",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getReadyForWork"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "potty",
+    "number": "11",
+    "duration": "10",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getNoahReady"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "breakfast",
+    "number": "12",
+    "duration": "10",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getNoahReady"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "brush noahs teeth",
+    "number": "13",
+    "duration": "5",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getNoahReady"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "get noah dressed",
+    "number": "14",
+    "duration": "10",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getNoahReady"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "play",
+    "number": "15",
+    "duration": "10",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "home"}
+    ] ,
+    "miniContexts":[
+      {"name": "getNoahReady"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "pokemon catching",
+    "number": "16",
+    "duration": "10",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "commute"}
+    ] ,
+    "miniContexts":[
+      {"name": "walkToWork"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "morning telegram video",
+    "number": "17",
+    "duration": "3",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "commute"}
+    ] ,
+    "miniContexts":[
+      {"name": "walkToWork"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "listen to audio",
+    "number": "17",
+    "duration": "40",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "commute"}
+    ] ,
+    "miniContexts":[
+      {"name": "walkToWork"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "listen to uplifting music",
+    "number": "18",
+    "duration": "4",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "commute"}
+    ] ,
+    "miniContexts":[
+      {"name": "walkToWork"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "put lunch in fridge",
+    "number": "19",
+    "duration": "1",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "commute"}
+    ] ,
+    "miniContexts":[
+      {"name": "setupOffice"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "restart computer",
+    "number": "20",
+    "duration": "5",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "commute"}
+    ] ,
+    "miniContexts":[
+      {"name": "setupOffice"}
+    ],
+    "Projects":[
+    ]
+  },
+  {
+    "name": "fill drinkbottle",
+    "number": "20",
+    "duration": "2",
+    "repeating": "true",
+    "frequency": {
+      "count": "1",
+      "interval": "day"
+    },
+    "isFlexible": "true",
+    "contexts":[
+      {"name": "commute"}
+    ] ,
+    "miniContexts":[
+      {"name": "setupOffice"}
+    ],
+    "Projects":[
+    ]
+  }
+]

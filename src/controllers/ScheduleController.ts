@@ -81,8 +81,6 @@ export class ScheduleController {
       const contexts: IContext[] = await this.contextTemplate.find({}) // TODO: need to be created from templates first
       const miniContexts: IMiniContext[] = await this.miniContextTemplate.find({}) // TODO: need to be created from templates first
       const projects = await this.project.find({
-        /*any of the contexts == any of the projects contexts*/
-        /*any of the miniContexts == any of the projects miniContexts*/
         isActive: true
       })
 
@@ -90,10 +88,6 @@ export class ScheduleController {
        *  list all tasks with a hard date
         */
       const hardTimedTasks = this.taskTemplate.find({ isFlexible: false })
-      //console.log("listed all contexts...")
-      //console.log(contexts.length)
-      //console.log("listed all miniContexts...")
-      //console.log(miniContexts.length)
 
       /* TODO: 
        * calculate the presence of a container with its repeating phases and/or dates
@@ -115,7 +109,7 @@ export class ScheduleController {
             type: 'miniContext'
           } as ITimeframeContainerForSort))
       ]
-      const timelineMap = allTimeContainers.reduce((acc: Record<string, IScheduleItem[]>, item: ITimeframeContainerForSort) => {
+      const OriginalTimelineMap = allTimeContainers.reduce((acc: Record<string, IScheduleItem[]>, item: ITimeframeContainerForSort) => {
 
         const addEvent = (time: Moment, action: actionType) => {
           const newTime = `${time.hour().toString().padStart(2, '0')}:${time.minute().toString().padStart(2, '0')}`;
@@ -132,6 +126,8 @@ export class ScheduleController {
         return acc;
       }, {} as Record<string, IScheduleItem[]>
       )
+
+      let timelineMap = OriginalTimelineMap
 
       const timeLineKeys = Object.keys(timelineMap)
       const timeLineSorted = timeLineKeys.sort((a, b) => timeDiff(a, b))
@@ -191,7 +187,12 @@ export class ScheduleController {
 
       }
 
-      console.log("Return Schedule", schedule)
+      let fullTimeLine = timeLine
+      console.log("TIMELINE", timeLine)
+      // TODO: add task list to the "timeline"
+      for (const scheduleTask of schedule){
+        console.log(scheduleTask.name, scheduleTask.startTime)
+      }
       return schedule
     }
     catch (e) {

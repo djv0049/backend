@@ -31,6 +31,7 @@ export function getTimeEntryEvents(timeEntry: { time: string, events: IScheduleI
 export function getTaskScore(task: ITaskTemplate, currentContexts: string[], currentMiniContexts: string[]) {
   // .. count the current contexts that match.
   // and save the score.. to use for ordering.
+  // TODO: change contexts arrays to be {name, start, end}, this will give duration, and ability to prioritise contexts by length, and weight them accordingly
   const contextWeight = 1
   const miniContextWeight = 2
   let miniContextCount: number = 0
@@ -109,5 +110,13 @@ export function getHighestScoredTask(
   const newTaskListSorted = sortTasksByDurationsAndScore(newTaskList)
   console.log("highest score", newTaskListSorted[0].name)
   return newTaskListSorted[0]
+
+}
+
+export function AddTaskListToEvents(){
+
+}
+
+export function AddTaskToEvents(task:any, events:any){
 
 }
