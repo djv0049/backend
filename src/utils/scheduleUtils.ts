@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment, { Moment } from "moment";
 import { IScheduleItem } from "../controllers/ScheduleController";
 import { Task, TaskTemplate } from "../entities";
 import { ITaskTemplate } from "../interfaces";
@@ -75,7 +75,7 @@ export function filterTasksByScheduled(taskList: ITaskTemplate[], schedule: Task
 }
 
 export function sortTasksByDurationsAndScore(taskList: Task[]) {
-  console.log("tlist",taskList.length)
+  console.log("tlist", taskList.length)
   if (taskList.some(t => !t.score))
     console.error("NO SCORE")
   return taskList.sort((a, b) => {
@@ -86,7 +86,7 @@ export function sortTasksByDurationsAndScore(taskList: Task[]) {
     console.log("score", a.name, "vs", b.name)
     console.log(a.score, b.score)
     console.log(a.duration, b.duration)
-    console.log("score",score)
+    console.log("score", score)
 
     return score
   })
@@ -113,10 +113,34 @@ export function getHighestScoredTask(
 
 }
 
-export function AddTaskListToEvents(){
+export function AddTaskListToEvents(taskList: Task[], eventsList: { time: string, events: IScheduleItem[] }[]) {
+  for (const task of taskList) {
+    AddTaskToEvents(task, eventsList)
+  }
 
 }
 
-export function AddTaskToEvents(task:any, events:any){
+export function AddTaskToEvents(task: Task, events: { time: string, events: IScheduleItem[] }[]) {
+  const start: IScheduleItem = {
+    name: task.name,
+    action: 'start',
+    type: 'task'
+  }
+  const end: IScheduleItem = {
+    name: task.name,
+    action: 'end',
+    type: 'task'
+  }
+  events.map(e => {
+    if (e.time == startTime)
+      e.events.push(start)
+  })
+  const startTime = events[task.startTime.format('HH:mm')]
+  const endTime = events[task.endTime.format('HH:mm')]
 
+
+  if (!events[startTime]) events[startTime] = []
+  if (!events[endTime]) events[endTime] = []
+  events[startTime].push(start)
+  events[endTime].push(end)
 }

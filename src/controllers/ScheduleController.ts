@@ -6,7 +6,7 @@ import { TaskTemplate } from '../entities/TaskTemplate';
 //import { generateScheduleLogic } from '../utils/scheduler';
 import { ContextTemplate, MiniContextTemplate, Project, Task } from '../entities/';
 import type { IContext, IMiniContext, ITaskTemplate } from '../interfaces';
-import { filterTasksForScheduling, getHighestScoredTask, getTaskScore, getTimeEntryEvents, momentFromString, taskFactory, timeDiff } from "../utils/scheduleUtils";
+import { AddTaskListToEvents, filterTasksForScheduling, getHighestScoredTask, getTaskScore, getTimeEntryEvents, momentFromString, taskFactory, timeDiff } from "../utils/scheduleUtils";
 
 
 interface ITimeframeContainerForSort {
@@ -16,11 +16,11 @@ interface ITimeframeContainerForSort {
   endTime: string
 }
 
-type actionType = 'start' | 'end'
+export type actionType = 'start' | 'end'
 
 export interface IScheduleItem {
   name: string
-  type: 'context' | 'miniContext'
+  type: 'context' | 'miniContext' | 'task'
   action: actionType
 }
 
@@ -187,11 +187,21 @@ export class ScheduleController {
 
       }
 
+      // FIX:
+      // TODO: add task list to the "timeline"
+
       let fullTimeLine = timeLine
       console.log("TIMELINE", timeLine)
+      AddTaskListToEvents(schedule, fullTimeLine)
+
       // TODO: add task list to the "timeline"
-      for (const scheduleTask of schedule){
-        console.log(scheduleTask.name, scheduleTask.startTime)
+      for (const scheduleTask of schedule) {
+        console.log()
+        console.log(scheduleTask.name)
+        console.log("start")
+        console.log(scheduleTask.startTime.hour(), ":", scheduleTask.startTime.minute())
+        console.log("duration")
+        console.log(scheduleTask.duration)
       }
       return schedule
     }
