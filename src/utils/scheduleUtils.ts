@@ -121,6 +121,7 @@ export function AddTaskListToEvents(taskList: Task[], eventsList: { time: string
 }
 
 export function AddTaskToEvents(task: Task, events: { time: string, events: IScheduleItem[] }[]) {
+  // TODO: working on this function
   const start: IScheduleItem = {
     name: task.name,
     action: 'start',
@@ -135,6 +136,7 @@ export function AddTaskToEvents(task: Task, events: { time: string, events: ISch
     if (e.time == startTime)
       e.events.push(start)
   })
+  
   const startTime = events[task.startTime.format('HH:mm')]
   const endTime = events[task.endTime.format('HH:mm')]
 
