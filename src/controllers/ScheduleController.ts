@@ -178,12 +178,13 @@ export class ScheduleController {
 
       let taskList: ITaskTemplate[] = []
       let cursor: string // TODO: add type for string of time
+      const floatingTime = "06:45"
       let defaultContexts: string[] = []
       let defaultMiniContexts: string[] = []
       for (let i = 0; i < timeLine.length; i++) {
-        const timeSquezedTasks: Task[] = []
         const timeEntry = timeLine[i]
-        cursor = timeEntry.time
+
+        const timeSquezedTasks: Task[] = []
         const nextEntry = timeLine[i + 1] ?? { time: '23:59', events: [{ type: '*', action: 'end' }] }
 
         let { currentContexts, currentMiniContexts } = getTimeEntryEvents(timeEntry, defaultContexts, defaultMiniContexts)
@@ -191,6 +192,12 @@ export class ScheduleController {
         if (currentContexts.length == 0 && currentMiniContexts.length == 0) {
           return ["no contexts or miniContexts"]
         }
+        const entryIsBeforeNow = momentFromString(timeEntry.time).isBefore(momentFromString(floatingTime))
+        const nextEntryIsAfterNow = momentFromString(nextEntry.time).isAfter(momentFromString(floatingTime))
+        cursor = entryIsBeforeNow ? floatingTime : timeEntry.time
+        if (entryIsBeforeNow && !nextEntryIsAfterNow) continue
+
+        console.log("shouldn't get here with time of less than 6:45", timeEntry.time)
         taskList = await this.getContextMatchingTasks(currentContexts, currentMiniContexts)
 
         let timeTillNextEntry = timeDiff(nextEntry.time, cursor)

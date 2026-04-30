@@ -77,7 +77,7 @@ export function filterTasksByScheduled(taskList: ITaskTemplate[], schedule: Task
 export function sortTasksByDurationsAndScore(taskList: Task[]) {
   // TODO: replace number with 'rank' within context. each context should list all tasks in order. each context should have its own order of priorities of tasks. 
   // Also TODO: rank, then weight contexts by their duraion, shorter context should always be prioritised
-  console.log("tlist", taskList.length)
+  //console.log("tlist", taskList.length)
   if (taskList.some(t => !t.score))
     console.error("NO SCORE")
   return taskList.sort((a, b) => {
@@ -86,10 +86,10 @@ export function sortTasksByDurationsAndScore(taskList: Task[]) {
     const number = a.number || 1 - b.number || 1
 
     const score = durationScore + scoreScore + number
-    console.log("score", a.name, "vs", b.name)
+    /*console.log("score", a.name, "vs", b.name)
     console.log(a.score, b.score)
     console.log(a.duration, b.duration)
-    console.log("score", score)
+    console.log("score", score)*/
 
     return score
   })
