@@ -47,6 +47,42 @@ export class ScheduleController {
 
   @Inject(Task)
   private task!: MongooseModel<Task>;
+  /*
+    // GET Schedule with date: 
+    // Get the date name (default to todays date)
+    // Get the template for the day with that name
+    // generate events list
+    // iterate through events list:
+    //  Get currently relevant tasks
+    //  Sort tasks
+    //  Add task to events
+    getScheduleByDay(date, startTime: 'HH:mm') {
+      // contexts, miniContexts, projects
+    }
+    createEventsListForContexts(contexts, miniContexts, projects) {
+      // eventsList
+    }
+  
+    populateEventsListWithTasks(eventsList, excludedTasksList) {
+      // explicit start time driven by eventsList first item
+      // declare current contexts/miniContexts/projects
+      // get next entry time.
+      getCurrentlyRelativeTasks(contexts, minicontexts, projects){
+        // task[]
+      }
+      sortTasks(taskList, contexts, minicontexts, projects){
+        // task[]
+  
+      }
+      // LOOP:
+      // compare next entry time with cursor, if cursor is before, repeat: (otherwise continue)
+      addTaskToEvents(task[0], eventsList){
+        // events list
+      }
+      // eventsList
+    }
+  */
+
 
 
   async getContextMatchingTasks(currentContexts: string[], currentMiniContexts: string[]) {
@@ -162,9 +198,6 @@ export class ScheduleController {
 
         while (timeTillNextEntry > 0
           && unscheduledTasks.length > 0
-          // TODO: replace with a more elegant solution
-          && momentFromString(cursor).isBefore(momentFromString('23:59'))
-          && !momentFromString(cursor).isSame(momentFromString('00:00'), 'minute')
         ) {
           unscheduledTasks = filterTasksForScheduling(unscheduledTasks, schedule, timeTillNextEntry)
           if (unscheduledTasks.length === 0)
@@ -187,21 +220,21 @@ export class ScheduleController {
 
       }
 
-      // FIX:
-      // TODO: add task list to the "timeline"
-
       let fullTimeLine = timeLine
       console.log("TIMELINE", timeLine)
-      AddTaskListToEvents(schedule, fullTimeLine)
+      let runningSchedule = AddTaskListToEvents(schedule, fullTimeLine)
+      runningSchedule = runningSchedule.sort((a, b) => timeDiff(a.time, b.time))
+      runningSchedule.map(e =>
+        console.log(`${e.time}: ${e.events.map(ee => `${ee.action}-${ee.name}, `)}`))
 
       // TODO: add task list to the "timeline"
       for (const scheduleTask of schedule) {
-        console.log()
+        /*console.log()
         console.log(scheduleTask.name)
         console.log("start")
         console.log(scheduleTask.startTime.hour(), ":", scheduleTask.startTime.minute())
         console.log("duration")
-        console.log(scheduleTask.duration)
+        console.log(scheduleTask.duration)*/
       }
       return schedule
     }

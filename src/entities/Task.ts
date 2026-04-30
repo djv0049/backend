@@ -47,4 +47,7 @@ export class Task extends TaskTemplate {
 
   @Property()
   score?: number
+
+  @Property()
+  number!: number // to be replaced by a rank from within the context array, but for now, it's overall order
 }

@@ -75,14 +75,17 @@ export function filterTasksByScheduled(taskList: ITaskTemplate[], schedule: Task
 }
 
 export function sortTasksByDurationsAndScore(taskList: Task[]) {
+  // TODO: replace number with 'rank' within context. each context should list all tasks in order. each context should have its own order of priorities of tasks. 
+  // Also TODO: rank, then weight contexts by their duraion, shorter context should always be prioritised
   console.log("tlist", taskList.length)
   if (taskList.some(t => !t.score))
     console.error("NO SCORE")
   return taskList.sort((a, b) => {
     const durationScore = a.duration > b.duration ? 2 : 1
     const scoreScore = a.score! - b.score!
+    const number = a.number || 1 - b.number || 1
 
-    const score = durationScore + scoreScore
+    const score = durationScore + scoreScore + number
     console.log("score", a.name, "vs", b.name)
     console.log(a.score, b.score)
     console.log(a.duration, b.duration)
@@ -114,9 +117,11 @@ export function getHighestScoredTask(
 }
 
 export function AddTaskListToEvents(taskList: Task[], eventsList: { time: string, events: IScheduleItem[] }[]) {
+  let events = eventsList
   for (const task of taskList) {
-    AddTaskToEvents(task, eventsList)
+    events = AddTaskToEvents(task, eventsList)
   }
+  return events
 
 }
 
@@ -132,17 +137,14 @@ export function AddTaskToEvents(task: Task, events: { time: string, events: ISch
     action: 'end',
     type: 'task'
   }
-  events.map(e => {
-    if (e.time == startTime)
-      e.events.push(start)
-  })
-  
-  const startTime = events[task.startTime.format('HH:mm')]
-  const endTime = events[task.endTime.format('HH:mm')]
-
-
-  if (!events[startTime]) events[startTime] = []
-  if (!events[endTime]) events[endTime] = []
-  events[startTime].push(start)
-  events[endTime].push(end)
+  const x = ([
+    [task.startTime.format("HH:mm"), start],
+    [task.endTime.format("HH:mm"), end]
+  ] as [string, IScheduleItem][])
+    .forEach(([time, value]) => {
+      (events.find(e => e.time === time) ||
+        events[events.push({ time, events: [] }) - 1]
+      ).events.push(value)
+    })
+  return events
 }
