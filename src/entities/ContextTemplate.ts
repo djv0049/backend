@@ -15,11 +15,6 @@ export class TimeframeContainer {
   @Property()
   tasks!: TaskTemplate[];
 
-  @Property()
-  startTime?: string
-
-  @Property()
-  endTime?: string
 }
 
 @Model()
