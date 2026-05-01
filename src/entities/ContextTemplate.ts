@@ -1,8 +1,11 @@
-import { Model } from '@tsed/mongoose';
+import { Model, ObjectID } from '@tsed/mongoose';
 import { Property } from '@tsed/schema';
 import { TaskTemplate } from './TaskTemplate';
 
 export class TimeframeContainer {
+  @ObjectID()
+  _id!: string;
+
   @Property()
   name!: string;
 

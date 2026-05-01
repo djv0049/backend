@@ -4,6 +4,7 @@ import { TaskTemplate, TaskTemplate as TaskTemplateModel } from '../entities/Tas
 import { MongooseModel } from '@tsed/mongoose';
 //import { DayTemplate } from '../entities/DayTemplate';
 import { ContextTemplate, MiniContextTemplate } from '../entities';
+import { log } from 'node:console';
 
 @Controller('/templates')
 @Injectable()
@@ -45,33 +46,35 @@ export class TemplateController {
   }
 
   // Context
-  @Get('/context-templates')
+  @Get('/context')
   async getContexts() {
     return this.contextTemplateModel.find({})
   }
 
-  @Post('/context-templates')
+  @Post('/context')
   async createContexts(@BodyParams() contextTemplate: Partial<ContextTemplate>) {
     return this.contextTemplateModel.create({ ...contextTemplate })
   }
 
-  @Patch('/context-templates/:id')
-  async updateContexts(@PathParams('id') id: string, @BodyParams() contextTemplate: Partial<ContextTemplate>) {
-    return this.contextTemplateModel.findByIdAndUpdate(id, { ...contextTemplate }, { new: true });
+  @Patch('/context/:id')
+  async updateContexts(@PathParams('id') _id: string, @BodyParams() contextTemplate: Partial<ContextTemplate>) {
+    log("patch context")
+    log("id", _id)
+    return this.contextTemplateModel.findByIdAndUpdate(_id, { ...contextTemplate }, { new: true });
   }
 
-  @Delete('/context-templates/:id')
+  @Delete('/context/:id')
   async deleteContexts(@PathParams('id') id: string) {
     return this.contextTemplateModel.deleteOne({ _id: id })
   }
 
   // MiniContext
-  @Get('/mini-context-templates')
+  @Get('/mini-context')
   async getMiniContexts() {
     return this.miniContextTemplateModel.find({})
   }
 
-  @Post('/mini-context-templates')
+  @Post('/mini-context')
   async createMiniContexts(@BodyParams() miniContextTemplate: Partial<MiniContextTemplate>) {
     return this.miniContextTemplateModel.create({ ...miniContextTemplate })
   }
