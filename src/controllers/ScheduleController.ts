@@ -195,9 +195,8 @@ export class ScheduleController {
         const entryIsBeforeNow = momentFromString(timeEntry.time).isBefore(momentFromString(floatingTime))
         const nextEntryIsAfterNow = momentFromString(nextEntry.time).isAfter(momentFromString(floatingTime))
         cursor = entryIsBeforeNow ? floatingTime : timeEntry.time
-        if (entryIsBeforeNow && !nextEntryIsAfterNow) continue
 
-        console.log("shouldn't get here with time of less than 6:45", timeEntry.time)
+        if (entryIsBeforeNow && !nextEntryIsAfterNow) continue
         taskList = await this.getContextMatchingTasks(currentContexts, currentMiniContexts)
 
         let timeTillNextEntry = timeDiff(nextEntry.time, cursor)
@@ -222,27 +221,15 @@ export class ScheduleController {
           timeTillNextEntry = timeDiff(nextEntry.time, cursor)
           unscheduledTasks = filterTasksForScheduling(unscheduledTasks, schedule, timeTillNextEntry)
         }
-        // NOTE:
-        // Return the taskInstances list
-
       }
 
       let fullTimeLine = timeLine
-      console.log("TIMELINE", timeLine)
+      //console.log("TIMELINE", timeLine)
       let runningSchedule = AddTaskListToEvents(schedule, fullTimeLine)
       runningSchedule = runningSchedule.sort((a, b) => timeDiff(a.time, b.time))
-      runningSchedule.map(e =>
-        console.log(`${e.time}: ${e.events.map(ee => `${ee.action}-${ee.name}, `)}`))
+      // runningSchedule.map(e => console.log(`${e.time}: ${e.events.map(ee => `${ee.action}-${ee.name}, `)}`))
 
       // TODO: add task list to the "timeline"
-      for (const scheduleTask of schedule) {
-        /*console.log()
-        console.log(scheduleTask.name)
-        console.log("start")
-        console.log(scheduleTask.startTime.hour(), ":", scheduleTask.startTime.minute())
-        console.log("duration")
-        console.log(scheduleTask.duration)*/
-      }
       return schedule
     }
     catch (e) {
