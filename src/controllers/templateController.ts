@@ -5,6 +5,7 @@ import { MongooseModel } from '@tsed/mongoose';
 //import { DayTemplate } from '../entities/DayTemplate';
 import { ContextTemplate, MiniContextTemplate } from '../entities';
 import { log } from 'node:console';
+import { DayTemplate } from '../entities/DayTemplate';
 
 @Controller('/templates')
 @Injectable()
@@ -12,14 +13,14 @@ export class TemplateController {
   @Inject(TaskTemplateModel)
   private taskTemplateModel!: MongooseModel<TaskTemplate>;
 
-  //@Inject(DayTemplate)
-  //private dayTemplateModel!: MongooseModel<DayTemplate>;
-
   @Inject(ContextTemplate)
   private contextTemplateModel!: MongooseModel<ContextTemplate>;
 
   @Inject(MiniContextTemplate)
   private miniContextTemplateModel!: MongooseModel<MiniContextTemplate>;
+
+  @Inject(DayTemplate)
+  private dayTemplateModel!: MongooseModel<DayTemplate>;
 
   // Task
   @Get('/')
@@ -27,7 +28,23 @@ export class TemplateController {
     const contexts = await this.contextTemplateModel.find({})
     const miniContexts = await this.miniContextTemplateModel.find({})
     const tasks = await this.taskTemplateModel.find({});
-    return { contexts, miniContexts, tasks }
+    const days = await this.dayTemplateModel.find({});
+    return { contexts, miniContexts, tasks, days }
+  }
+  
+  @Get('/day')
+  async getDays() {
+    return this.dayTemplateModel.find({})
+  }
+
+  @Post('/day')
+  async createDayTemplate(@BodyParams() template: Partial<DayTemplate>) {
+    return this.dayTemplateModel.create({ ...template });
+  }
+
+  @Delete('/day/:id')
+  async deleteDayTemplate(@PathParams('id') id: string) {
+    return this.dayTemplateModel.findByIdAndDelete(id);
   }
 
   @Get('/task')
