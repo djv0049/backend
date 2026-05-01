@@ -22,16 +22,24 @@ export class TemplateController {
 
   // Task
   @Get('/')
-  async getTaskTemplates() {
-    return this.taskTemplateModel.find({});
+  async getAllTemplates() {
+    const contexts = await this.contextTemplateModel.find({})
+    const miniContexts = await this.miniContextTemplateModel.find({})
+    const tasks = await this.taskTemplateModel.find({});
+    return { contexts, miniContexts, tasks }
   }
 
-  @Post('/')
+  @Get('/task')
+  async getTasks() {
+    return this.contextTemplateModel.find({})
+  }
+
+  @Post('/task')
   async createTaskTemplate(@BodyParams() template: Partial<TaskTemplate>) {
     return this.taskTemplateModel.create({ ...template });
   }
 
-  @Delete('/:id')
+  @Delete('/task/:id')
   async deleteTaskTemplate(@PathParams('id') id: string) {
     return this.taskTemplateModel.findByIdAndDelete(id);
   }
@@ -69,7 +77,7 @@ export class TemplateController {
   }
 
   @Patch('/mini-context-templates/:id')
-  async updateMiniContexts(@PathParams('id') id: string, @BodyParams()miniCcontextTemplate: Partial<MiniContextTemplate>) {
+  async updateMiniContexts(@PathParams('id') id: string, @BodyParams() miniCcontextTemplate: Partial<MiniContextTemplate>) {
     return this.miniContextTemplateModel.findByIdAndUpdate(id, { ...miniCcontextTemplate }, { new: true });
   }
 
