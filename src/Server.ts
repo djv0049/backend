@@ -1,18 +1,15 @@
-import { Configuration, Inject } from "@tsed/di";
 import { PlatformApplication } from "@tsed/common";
+import { Configuration, Inject } from "@tsed/di";
+import '@tsed/mongoose';
 import "@tsed/platform-express";
 import bodyParser from "body-parser";
 import compress from "compression";
 import cookieParser from "cookie-parser";
-import methodOverride from "method-override";
 import cors from "cors";
-import '@tsed/mongoose'
-import * as controllers from "../src/controllers"
-import { readFileSync } from "fs";
-import { join } from "path";
 import 'dotenv/config';
+import methodOverride from "method-override";
+import * as controllers from "../src/controllers";
 
-console.log(process.env.MONGO_URL)
 @Configuration({
   rootDir: __dirname,
   acceptMimes: ["application/json"],
